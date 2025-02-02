@@ -6,6 +6,7 @@ const hookUrl =
   "https://raw.githubusercontent.com/siberiacancode/reactuse/main/src/hooks";
 
 const button = document.querySelector("button");
+const deps = document.querySelector(".deps");
 
 button.addEventListener("click", onClick);
 
@@ -33,7 +34,7 @@ function extractHookDependency(ast) {
       .map((specifier) => specifier.imported.name)
   );
 
-  console.log("hookDependencies", hookDependencies);
+  return hookDependencies;
 }
 
 async function onClick() {
@@ -41,7 +42,8 @@ async function onClick() {
   const ast = parseAst(hookContent);
 
   insertHookContent(hookContent);
-  extractHookDependency(ast);
+  const hookDependencies = extractHookDependency(ast);
+  insertHookDeps(hookDependencies);
 }
 
 function parseAst(hookContent) {
@@ -58,4 +60,17 @@ function insertHookContent(hookContent) {
 
   textArea.value = "";
   textArea.value = hookContent;
+}
+
+function insertHookDeps(hookDependencies) {
+  deps.innerHTML = "";
+
+  for (const hookName of hookDependencies) {
+    let span = document.createElement("span");
+
+    span.append(hookName);
+    span.classList.add("hook-deps");
+
+    deps.appendChild(span);
+  }
 }

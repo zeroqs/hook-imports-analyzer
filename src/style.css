@@ -14,8 +14,21 @@
 }
 
 textarea {
-  width: 1440px;
-  height: 800px;
+  width: 1040px;
+  min-height: 800px;
+}
+
+.deps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.hook-deps {
+  background-color: #4fa353;
+  padding: 4px;
+  border-radius: 4px;
 }
 
 input {
@@ -51,7 +64,6 @@ h1 {
 }
 
 #app {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
