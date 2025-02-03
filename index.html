@@ -17,9 +17,23 @@
           <textarea name="hook" id="hook"></textarea>
         </div>
 
-        <div style="flex: 1 1 30%; text-align: left">
-          Hooks deps:
-          <div class="deps"></div>
+        <div
+          style="
+            flex: 1 1 30%;
+            text-align: left;
+            flex-direction: column;
+            gap: 50px;
+            display: flex;
+          "
+        >
+          <div>
+            Hooks deps:
+            <div class="hooks-deps deps"></div>
+          </div>
+          <div>
+            Utils deps:
+            <div class="utils-deps deps"></div>
+          </div>
         </div>
       </div>
     </div>

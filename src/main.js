@@ -6,7 +6,8 @@ const hookUrl =
   "https://raw.githubusercontent.com/siberiacancode/reactuse/main/src/hooks";
 
 const button = document.querySelector("button");
-const deps = document.querySelector(".deps");
+const hookDeps = document.querySelector(".hooks-deps");
+const utilsDeps = document.querySelector(".utils-deps");
 
 button.addEventListener("click", onClick);
 
@@ -37,13 +38,30 @@ function extractHookDependency(ast) {
   return hookDependencies;
 }
 
+function extractUtilsDependency(ast) {
+  const utilsImportNodes = ast.body.filter(
+    (node) =>
+      node.type === "ImportDeclaration" && node.source.value.includes("@/utils")
+  );
+
+  const utilsDependencies = utilsImportNodes.flatMap((node) =>
+    node.specifiers
+      .filter((specifier) => specifier.type === "ImportSpecifier")
+      .map((specifier) => specifier.imported.name)
+  );
+
+  return utilsDependencies;
+}
+
 async function onClick() {
   const hookContent = await fetchHookContent();
   const ast = parseAst(hookContent);
 
   insertHookContent(hookContent);
   const hookDependencies = extractHookDependency(ast);
-  insertHookDeps(hookDependencies);
+  insertDeps(hookDependencies, hookDeps);
+  const utilsDependencies = extractUtilsDependency(ast);
+  insertDeps(utilsDependencies, utilsDeps);
 }
 
 function parseAst(hookContent) {
@@ -62,8 +80,8 @@ function insertHookContent(hookContent) {
   textArea.value = hookContent;
 }
 
-function insertHookDeps(hookDependencies) {
-  deps.innerHTML = "";
+function insertDeps(hookDependencies, nodeToInsert) {
+  nodeToInsert.innerHTML = "";
 
   for (const hookName of hookDependencies) {
     let span = document.createElement("span");
@@ -71,6 +89,6 @@ function insertHookDeps(hookDependencies) {
     span.append(hookName);
     span.classList.add("hook-deps");
 
-    deps.appendChild(span);
+    nodeToInsert.appendChild(span);
   }
 }
